@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static '/css/main.css' %}">
+    <title>LITReview</title>
+</head>
+<body class="base-body">
+    <header id="site_header">
+        <div class="base-logo">
+            <img src="{% static '/img/logo sans texte.png' %}" alt="logo">
+            <h1>LITReview</h1>
+        </div>
+        <div class="navbar">
+            <ul>
+                <li><a href="#">Flux</a></li>
+                <li><a href="#">Posts</a></li>
+                <li><a href="#">Abonnements</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Se déconnecter</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </header>
+    <div class="base-content">
+        {% block content %}{% endblock content %}
+    </div>
+    <footer>
+        Projet n°9 - OPENCLASSROOMS - Développement d'un site web avec DJANGO
+        <br>
+        Alexis AUBRY <a href="https://github.com/AlexBotswana">voir mon Github</a>
+    </footer>
+
+</body>
+</html>

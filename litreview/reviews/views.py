@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate, logout, get_user
 from django.conf import settings
-from django.views import generic
-from . import forms
+from . import forms, models
 
 # def login(request):
     # locals() will collect all variables that you created inside function.
@@ -43,6 +42,13 @@ def signup_page(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect(settings.LOGIN_REDIRECT_URL)
-
+            return redirect(settings.LOGIN_URL)
     return render(request, 'reviews/signup.html', context={'form': form})
+
+def feed(request):
+    user = get_user(request)
+    reviews = models.Review.objects.filter(user=user.id)
+    tickets = models.Ticket.objects.filter(user=user.id)
+
+
+    return render(request, 'reviews/feed.html')
