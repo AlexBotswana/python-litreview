@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
-
+from . import models
 
 class LoginForm(forms.Form):
 
@@ -48,3 +48,25 @@ class SignupForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = get_user_model()
         fields = ('username',)
+
+class TicketForm(forms.ModelForm):
+    edit_ticket = forms.BooleanField(
+        widget=forms.HiddenInput,
+        initial=True
+    )
+    title = forms.CharField(
+        max_length=128,
+        widget=forms.TextInput(attrs={'class': "xl-field"})
+    )
+    description = forms.CharField(
+        max_length=128,
+        widget=forms.Textarea(attrs={'class':"xl-field"})
+    )
+    image = forms.ImageField(
+        required=True,
+        widget=forms.FileInput,
+    )
+    class Meta:
+        model = models.Ticket
+        fields = ['title', 'description', 'image']
+

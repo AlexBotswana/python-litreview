@@ -25,5 +25,5 @@ urlpatterns = [
     path('signup/', reviews.views.signup_page, name='signup'),
     path('logout/', reviews.views.logout_user, name='logout'),
     path('feed/', reviews.views.feed, name='feed'),
-        # path('reviews/', include('reviews.urls')),
+    path('ticket/<int:ticket_id>', reviews.views.view_ticket, name='view_ticket'),
 ]

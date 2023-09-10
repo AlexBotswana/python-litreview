@@ -1,4 +1,5 @@
 {% load static %}
+{% csrf_token %}
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
@@ -20,9 +21,9 @@
             <div class="login">
                 <p>Connectez-vous</p>
                 <form method="post">
+                    {% csrf_token %}
                     <input type="text" name="username" placeholder="Nom d'utilisateur" maxlength="63" required="" id="id_username">
                     <input type="password" name="password" placeholder="Mot de passe" maxlength="63" required="" id="id_password">
-                    {% csrf_token %}
                     <button class="action-button" type="submit" >Se connecter</button>
                 </form>
             </div>

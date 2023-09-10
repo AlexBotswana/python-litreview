@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout, get_user
 from django.conf import settings
 from . import forms, models
@@ -52,3 +52,8 @@ def feed(request):
 
 
     return render(request, 'reviews/feed.html')
+
+def view_ticket(request, ticket_id):
+    ticket = get_object_or_404(models.Ticket, id=ticket_id)
+    return render(request, 'reviews/view_ticket.html', context={'ticket': ticket})
+
