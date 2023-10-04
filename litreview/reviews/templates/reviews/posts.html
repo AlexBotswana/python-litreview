@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %} 
+    <div class="center-title">
+        Vos Posts
+    </div>    
+    {% for post in posts %}
+            <div class="ticket-container">
+                {% if post.image.url is not None %}
+                    <img src="{% static '/img/logo sans texte.png' %}" alt="logo">
+                {% endif %}
+                <div class="field-group-column">
+                    <div class="field-group-row">
+                        Vous avez demandé une critique le
+                        {{ post.time_created}}                        
+                    </div>
+                    <div>{{ post.title }}</div>
+                    <div>{{ post.description }}</div>
+                    <div class="create-button-box">
+                        <a class="action-button" href="#">Modifier</a>
+                        <a class="action-button" href="#">Supprimer</a>
+                    </div>
+                </div>
+            </div>
+    {% endfor %}
+{% endblock content %}

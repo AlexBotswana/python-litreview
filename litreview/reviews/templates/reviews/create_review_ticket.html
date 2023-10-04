@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="center-title">
+        <p>Créer une critique</p>
+    </div>
+    <div class="ticket-container">
+        <div>
+            <p>Vous êtes en train de poster en réponse à</p>
+        </div>
+        <div class="field-group">
+            <output type="text" id="username" name="username" size="60">
+            <label>a demandé une critique</label>          
+        </div>
+        <div class="field-group">
+            <label for="description">Description</label>
+            <textarea  id="description" name="description" rows="10" cols="60"></textarea>
+        </div>
+        <div class="field-group">
+            <label for="image">Image</label>
+        </div>
+    </div>
+    <div class="ticket-container">
+        <div>
+            <p>Critique</p>
+        </div>
+        <div class="field-group">
+            <label for="title">Titre</label>
+            <textarea name="title" id="title" cols="60"></textarea>           
+        </div>
+        <div>
+            <div>
+                <p>Note</p>
+            </div>
+            <label>
+                <input type="radio" name="option" value="rate1">
+                0
+            </label>
+            <label>
+                <input type="radio" name="option" value="rate2">
+                1
+            </label>
+            <label>
+                <input type="radio" name="option" value="rate3">
+                2
+            </label>
+            <label>
+                <input type="radio" name="option" value="rate4">
+                3
+            </label>
+            <label>
+                <input type="radio" name="option" value="rate5">
+                4
+            </label>
+            <label>
+                <input type="radio" name="option" value="rate6">
+                5
+            </label>
+        </div>
+        <div class="field-group">
+            <label for="comment">Commentaire</label>
+            <textarea id="comment" name="comment" rows="10" cols="60"></textarea>
+        </div>
+        <div class="space-bottom">
+            <a class="action-button" href="#">Envoyer</a>
+        </div>
+    </div>
+{% endblock content %}

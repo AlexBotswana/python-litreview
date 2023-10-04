@@ -8,29 +8,31 @@
     <link rel="stylesheet" href="{% static '/css/main.css' %}">
     <title>LITReview</title>
 </head>
-<body id="login-body">
-    <div class="login-container">
-        <div class="logo">
+<body>
+    <div class="signup-container">
+        <div class="logo-connection">
             <img src="{% static '/img/logo.png' %}" alt="">
         </div>
-        <div class="content">
-            <div class="register__content">
+        <div class="center-signup">
+            <div>
+                <p>Inscrivez-vous</p>
+            </div>
+            <div class="signup-connection">
                 {% if form.errors %}
                     {{ form.username.errors }}
                     {{ form.password1.errors }}
                     {{ form.password2.errors }}
                 {% endif %}
-                <p>Inscrivez-vous</p>
                 <form method="post">
                     {% csrf_token %}
-                    {{ form.username }}
-                    <br>
-                    {{ form.password1}}
-                    <br>
-                    {{ form.password2 }}
-                    <div class="register__action-bloc">
-                        <a class="action-button" href="{% url 'login' %}">Retour</a>
-                        <button class="action-button" type="submit">S'inscrire</button>
+                    <div class="login-space-field">
+                        {{ form.username }}
+                        {{ form.password1}}
+                        {{ form.password2 }}
+                        <div class="space-bottom">
+                            <a class="action-button" href="{% url 'login' %}">Retour</a>
+                            <button class="action-button" type="submit">S'inscrire</button>
+                        </div>
                     </div>
                 </form>
             </div>

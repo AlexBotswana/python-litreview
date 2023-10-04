@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="center-title">
+        <p>Créer une critique et un ticket</p>
+    </div>
+    <form class="field-group-column" method="post" enctype="multipart/form-data">
+        <div class="ticket-container">
+            <div>
+                <p>Livre / Article</p>
+            </div>  
+            <div class="field-group-column">    
+                <label for="{{ form.title.label }}">Titre</label>
+                {{ ticket_form.title }}
+            </div>
+            <div class="field-group-column">
+                <label for="{{ form.description.label }}">Description</label>
+                {{ ticket_form.description }}
+            </div>
+            <div class="field-group-column">
+                <label>Image</label>
+                {{ ticket_form.image }}
+            </div>
+        </div>
+        <div class="ticket-container">
+            <p>Critique</p>
+            {{ review_form.as_p }}
+            {% csrf_token %}
+            <div class="action-button">
+                <button type="submit">Envoyer</button>
+            </div>
+        </div>
+    </form>
+{% endblock content %}

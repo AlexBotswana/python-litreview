@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="center-title">
+        Créer un ticket
+    </div>
+    <div class="ticket-container">
+        <div>
+            <p>Livre / Article</p>
+        </div>
+        <form class="field-group-column" method="post" enctype="multipart/form-data">
+            <div class="field-group-column">    
+                <label for="{{ form.title.label }}">Titre</label>
+                {{ form.title }}
+            </div>
+            <div class="field-group-column">
+                <label for="{{ form.description.label }}">Description</label>
+                {{ form.description }}
+            </div>
+            <div class="field-group-column">
+                <label>Image</label>
+                {{ form.image }}
+            </div>
+            {{ form.edit_ticket }}
+            {% csrf_token %}
+            <div class="action-button">
+                <button type="submit">Publier</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

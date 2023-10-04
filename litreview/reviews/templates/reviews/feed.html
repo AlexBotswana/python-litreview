@@ -2,53 +2,21 @@
 {% load static %}
 
 {% block content %}
-    <div class="create-button-box">
-        <a class="create-button-link" href="#">Demander une critique</a>
-        <a class="create-button-link" href="#">Créer une critique</a>
+    <div class="feed-buttons">
+        <a class="action-button" href="{% url 'create_ticket' %}">Demander une critique</a>
+        <a class="action-button" href="{% url 'create_review_wo_ticket' %}">Créer une critique</a>
     </div>
     {% for post in posts %}
-        {% if post.content_type == 'TICKET' %}
-            <div class="post container center">
-                {% if post.image.url is not None %}
-                    <img src="{{ post.image.url }}" alt="{% static 'img/logo.png' %}">
-                {% endif %}
-                <div class="content cc">
-                    <p>{{ post.user.username|add:" a demandé une critique"}}</p>
-                    <p class="date">{{ post.time_created}}</p>
-                    <h3>{{ post.title }}</h3>
-                    <p>{{ post.description }}</p>
-                    <a class="create-button-link" href="#">Créer une critique</a>
-                </div>
-            </div>
-        {% elif post.content_type == 'REVIEW' %}
-            <div class="container center post">
-                <div class="sub_post">
-                    <p class="date inline right">{{ post.time_created}}</p>
-                    <p>{{ post.user.username|add:" a publié une critique"}}</p>
-                    <p class="inline">{{ post.headline|add:" - "}}</p>
-                    {% with ''|center:5 as range %}
-                        {% for i in range %}
-                            {% if post.rating < forloop.counter  %}
-                                <span class="fa fa-star checked"></span>
-                            {% else %}
-                                <span class="fa fa-star"></span>
-                            {% endif %}
-                        {% endfor %}
-                    {% endwith %}
-                    <p class="right body">{{ post.body}}</p>
-                </div>
-                <div class="sub_post min_height">
-                    {% if post.ticket.image.url is not None %}
-                        <img src="{{ post.ticket.image.url }}" alt="{% static 'img/logo.png' %}">
-                    {% endif %}
-                    <div class="content cc">
-                        <p>{{ post.user.username|add:" a demandé une critique"}}</p>
-                        <p class="date">{{ post.ticket.time_created}}</p>
-                        <h3>{{ post.ticket.title }}</h3>
-                        <p>{{ post.ticket.description }}</p>
+            <div class="ticket-container">
+                <div class="field-group-column">
+                    <div class="field-group-row">
+                        {{ post.user.username|add:" a demandé une critique le "}}
+                        {{ post.time_created}}                        
                     </div>
+                    <div>{{ post.title }}</div>
+                    <div>{{ post.description }}</div>
+                    <a class="action-button" href="#">Créer une critique</a>
                 </div>
             </div>
-        {% endif %}
     {% endfor %}
 {% endblock content %}

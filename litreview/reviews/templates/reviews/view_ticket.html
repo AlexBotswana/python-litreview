@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
-{% block content %}
+{% load static %}
     <h2>{{ ticket.title }}</h2>
     <p><a href="#">Modifier le ticket</a> </p>
     <img src="{{ ticket.image.url }}">
     <p>{{ ticket.description }}</p>
-{% endblock content %}
