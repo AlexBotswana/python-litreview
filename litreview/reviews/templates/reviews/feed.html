@@ -3,20 +3,66 @@
 
 {% block content %}
     <div class="feed-buttons">
-        <a class="action-button" href="{% url 'create_ticket' %}">Demander une critique</a>
+        <a class="action-button" href="{% url 'create_ticket' %}">Créer un ticket</a>
         <a class="action-button" href="{% url 'create_review_wo_ticket' %}">Créer une critique</a>
     </div>
     {% for post in posts %}
+        <div class="center-div">
+            {% if post.content_type == 'TICKET' %}
             <div class="ticket-container">
                 <div class="field-group-column">
                     <div class="field-group-row">
                         {{ post.user.username|add:" a demandé une critique le "}}
                         {{ post.time_created}}                        
                     </div>
-                    <div>{{ post.title }}</div>
-                    <div>{{ post.description }}</div>
-                    <a class="action-button" href="#">Créer une critique</a>
+                    <div class="field-group-row">
+                        <img src="{% static '../' %}{{ post.image }}" alt="logo">
+                        <div class="field-group-column">
+                            <div>{{ post.title }}</div>
+                            <textarea resize="none" readonly id="description" name="description" rows="10" cols="60">{{ post.description }}</textarea>
+                        </div>
+                    </div>
+                    <a class="action-button" href="{% url 'create_review_ticket' post.id %}">Créer une critique</a>
                 </div>
             </div>
+            {% elif post.content_type == 'REVIEW' %}
+            <div class="ticket-container">
+                <div class="field-group-row">
+                    {{ post.user.username|add:" a publié une critique le "}}
+                    {{ post.time_created}}                        
+                </div>
+                <div>
+                    {{ post.headline }}
+                </div>
+                <div class="field-group-response">
+                    <div>Note - </div>
+                    {% for star in stars_values %}
+                        {% if star <=  post.rating %}
+                            <img src="{% static './img/star-filled.png/' %}" width="30" height="30" alt="*">
+                        {% elif star > post.rating %}
+                            <img src="{% static './img/star-lined.png/' %}" width="30" height="30" alt="*">
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="field-group">
+                    {{ post.body }}
+                </div>        
+                <div class="ticket-container">
+                    <div class="field-group-response">
+                        <label>Ticket </label> 
+                    </div>
+                    <div class="field-group-row">
+                        {% if post.ticket.image %}
+                        <img src="{% static '../' %}{{ post.ticket.image }}" alt="logo">
+                        {% endif %}
+                        <div class="field-group-column">
+                            <div>{{ post.ticket.title }}</div>
+                            <textarea resize="none" readonly id="description" name="description" rows="10" cols="60">{{ post.ticket.description }}</textarea>
+                        </div>
+                    </div>    
+                </div>
+            {% endif %}
+            </div>
+        </div>
     {% endfor %}
 {% endblock content %}

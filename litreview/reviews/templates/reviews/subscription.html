@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="subscrib-container">
+        <div>
+            <p>Suivre d'autres utilisateurs</p>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <div class="subs-align-btn">
+                <input type="text" name="name" placeholder="Nom de l'utilisateur">
+                <button class="action-button" type="submit">Envoyer</button>
+            </div>
+        </form>
+        <div>
+            <p>Abonnements</p>
+        </div>
+        {% for followed in users_followed %}
+            <div class="subs-list-line">
+                <div class="field-group">
+                    {{ followed.followed_user }}
+                </div>
+                <div class="field-group">
+                    <a href="#">désabonner</a>
+                </div>
+            </div>
+        {% endfor %}
+        
+        <div>
+            <p>Abonnés</p>
+        </div>
+        {% for follower in users_followers %}
+            <div class="field-group">
+                {{ follower.user }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}

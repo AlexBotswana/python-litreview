@@ -2,68 +2,54 @@
 {% load static %}
 
 {% block content %}
-    <div class="center-title">
-        <p>Créer une critique</p>
-    </div>
     <div class="ticket-container">
-        <div>
-            <p>Vous êtes en train de poster en réponse à</p>
+        <p>Critique</p>
+        <div class="center-title">
+            <p>Créer une critique</p>
         </div>
-        <div class="field-group">
-            <output type="text" id="username" name="username" size="60">
-            <label>a demandé une critique</label>          
-        </div>
-        <div class="field-group">
-            <label for="description">Description</label>
-            <textarea  id="description" name="description" rows="10" cols="60"></textarea>
-        </div>
-        <div class="field-group">
-            <label for="image">Image</label>
-        </div>
-    </div>
-    <div class="ticket-container">
-        <div>
-            <p>Critique</p>
-        </div>
-        <div class="field-group">
-            <label for="title">Titre</label>
-            <textarea name="title" id="title" cols="60"></textarea>           
-        </div>
-        <div>
+        <div class="ticket-container">
             <div>
-                <p>Note</p>
+                <p>Vous êtes en train de poster en réponse à {{ ticket.title }}</p>
             </div>
-            <label>
-                <input type="radio" name="option" value="rate1">
-                0
-            </label>
-            <label>
-                <input type="radio" name="option" value="rate2">
-                1
-            </label>
-            <label>
-                <input type="radio" name="option" value="rate3">
-                2
-            </label>
-            <label>
-                <input type="radio" name="option" value="rate4">
-                3
-            </label>
-            <label>
-                <input type="radio" name="option" value="rate5">
-                4
-            </label>
-            <label>
-                <input type="radio" name="option" value="rate6">
-                5
-            </label>
+            <div class="field-group">
+                {{ ticket.user }}
+                <label>a demandé une critique</label>          
+            </div>
+            <div class="field-group">
+                <label for="description">Description</label>
+                <textarea  id="description" name="description" rows="10" cols="60">{{ ticket.description }}</textarea>
+            </div>
+            <div class="field-group">
+                <img src="{% static '../' %}{{ ticket.image }}" alt="logo">
+            </div>
         </div>
-        <div class="field-group">
-            <label for="comment">Commentaire</label>
-            <textarea id="comment" name="comment" rows="10" cols="60"></textarea>
-        </div>
-        <div class="space-bottom">
-            <a class="action-button" href="#">Envoyer</a>
-        </div>
+        <form method="post" enctype="multipart/form-data">
+            <div class="ticket-container">
+                <div>
+                    <p>Critique</p>
+                </div>
+                <div class="field-group">
+                    <label for="title">Titre</label>
+                    {{ review_form.headline }}           
+                </div>
+                <div>
+                    <div>
+                        <p>Note</p>
+                    </div>
+                    {{ review_form.rating }}
+                </div>
+                <div class="field-group">
+                    <label for="comment">Commentaire</label>
+                    {{ review_form.body }}
+                </div>
+                <div class="space-bottom">
+                    <div class="action-button">
+                        {{ review_form.edit_review }}
+                        {% csrf_token %}
+                        <button type="submit">Envoyer</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
 {% endblock content %}

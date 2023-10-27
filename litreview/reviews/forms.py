@@ -93,3 +93,19 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = models.Review
         fields = ['headline', 'rating', 'body']
+
+class DeletePostForm(forms.Form):
+    delete_post = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
+class FollowUsersForm(forms.ModelForm):
+    """
+    form for follow users
+    """
+
+    class Meta:
+        """
+        Meta for FollowUserForm. Fields : 'followed_user'
+        """
+
+        model = models.UserFollows
+        fields = ["followed_user"]

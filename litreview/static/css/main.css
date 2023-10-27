@@ -55,6 +55,10 @@ footer {
     width: 50px;
 }
 
+.logo-post {
+    width: 10px;
+}
+
 .logo-title {
     font-family: 'lilita One', monospace;
     font-weight: 900;
@@ -204,6 +208,14 @@ footer {
     flex-wrap: nowrap;
     list-style: none;
   }
+
+.center-div {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
 
   /* feed window */
 .feed-buttons {

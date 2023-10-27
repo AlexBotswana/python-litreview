@@ -1,9 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout, get_user
+from django.contrib.auth.models import User
 from django.conf import settings
 from . import forms, models
-from .models import Ticket, Review
+from .forms import ReviewForm, TicketForm, DeletePostForm
+from .models import Ticket, Review, UserFollows
 from itertools import chain
+from django.db.models import CharField, Value
+from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 
 # def login(request):
     # locals() will collect all variables that you created inside function.
@@ -49,12 +54,17 @@ def signup_page(request):
 
 def feed(request):
     tickets = models.Ticket.objects.all()
+    reviews = models.Review.objects.all()
+
+    tickets = tickets.annotate(content_type=Value("TICKET", CharField()))
+    reviews = reviews.annotate(content_type=Value("REVIEW", CharField()))
     posts = sorted(
-        tickets,
+        chain(reviews, tickets),
         key=lambda post: post.time_created,
         reverse=True
         )
-    return render(request, 'reviews/feed.html', context={'posts': posts})
+    stars_values= [1,2,3,4,5]
+    return render(request, 'reviews/feed.html', context={'posts': posts, 'stars_values': stars_values})
 
 
 def view_ticket(request, ticket_id):
@@ -67,6 +77,7 @@ def create_ticket(request):
 
     if request.method == 'POST':
         form = forms.TicketForm(request.POST, request.FILES)
+        print(request.POST, request.FILES)
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.user = request.user
@@ -77,41 +88,152 @@ def create_ticket(request):
 def posts(request):
     current_user = request.user
     tickets = models.Ticket.objects.filter(user=current_user.id)
-    # tickets = models.Ticket.objects.all()
+    reviews = models.Review.objects.filter(user=current_user.id)
+
+    tickets = tickets.annotate(content_type=Value("TICKET", CharField()))
+    reviews = reviews.annotate(content_type=Value("REVIEW", CharField()))
     posts = sorted(
-        tickets,
+        chain(reviews, tickets),
         key=lambda post: post.time_created,
         reverse=True
         )
     
-    return render(request, "reviews/posts.html", context={'posts': posts})
+    stars_values= [1,2,3,4,5]
+    return render(request, "reviews/posts.html", context={'posts': posts, 'stars_values': stars_values})
 
-def create_review_ticket(request):
-    review_form = forms.ReviewForm()
+def create_review_ticket(request, ticket_id):
+    review_form = ReviewForm()
+    ticket = Ticket.objects.get(id=ticket_id)
+
+    if request.method == 'POST':
+        review_form = ReviewForm(request.POST, request.FILES)
+        if review_form.is_valid():
+            review = review_form.save(commit=False) 
+            review.ticket = ticket
+            ticket.save()
+            review.user = request.user  
+            review.save()  
+
+            return redirect(settings.REDIRECT_FEED)  
+    
+    context = {
+        "review_form": review_form,
+        "ticket": ticket,
+    }
+
+    return render(request, 'reviews/create_review_ticket.html', context=context)
 
 def create_review_wo_ticket(request):
     
-    ticket_form = forms.TicketForm()
-    review_form = forms.ReviewForm()
+    form_ticket = TicketForm()
+    form_review = ReviewForm()
+    if request.method == "POST":
+        form_ticket_post = TicketForm(request.POST, request.FILES)
+        form_review_post = ReviewForm(request.POST)
+        if form_ticket_post.is_valid() and form_review_post.is_valid():
+            review_form = form_review_post.save(commit=False)
+            ticket_form = form_ticket_post.save(commit=False)
+            ticket = Ticket.objects.create(
+                title=ticket_form.title,
+                description=ticket_form.description,
+                user=request.user,
+                image=ticket_form.image,
+                time_created=ticket_form.time_created,
+            )
+            review_form.ticket = ticket
+            review_form.user = request.user
 
-    if request.method == 'POST':
-        ticket_form = forms.TicketForm(request.POST, request.FILES)
-        review_form = forms.ReviewForm(request.POST)
-        if ticket_form.is_valid() and review_form.is_valid():
-            ticket = ticket_form.save(commit=False)
-            ticket.user = request.user
-            ticket.has_review = True
             ticket.save()
-            
-            review = review_form.save(commit=False)
-            review.user = request.user
-            review.save()
+            review_form.save()
             return redirect(settings.REDIRECT_FEED)
-        
-        else:
-            context_review = {
-                'ticket_form': ticket_form,
-                'review_form': review_form,
-        }
-        
-        return render(request, 'reviews/review_wo_ticket_create.html', context=context_review)
+    context = {
+        "form_ticket": form_ticket,
+        "form_review": form_review,
+    }
+    return render(request, 'reviews/create_review_wo_ticket.html', context=context)
+
+def delete_post(request, ticket_id):
+    # get post id and delete if ticket or review
+    try:
+        obj = Ticket.objects.get(id=ticket_id)
+    except Ticket.DoesNotExist:
+        obj = Review.objects.get(id=ticket_id)
+    delete_form = DeletePostForm()
+    if request.method == "POST":
+        delete_form = DeletePostForm(request.POST)
+        if delete_form.is_valid():
+            if isinstance(obj, Review):
+                obj.ticket.save()
+            obj.delete()
+            return redirect(settings.REDIRECT_POSTS)
+    context = {"delete_form": delete_form}
+    return render(request, 'reviews/delete_post.html', context=context)
+
+def edit_post (request, ticket_id):
+    """ get post_id and edit post (try ticket, else review)"""
+    try:
+        obj = Ticket.objects.get(id=ticket_id)
+        form = TicketForm
+        html = "reviews/edit_ticket.html"
+    except Ticket.DoesNotExist:
+        obj = Review.objects.get(id=ticket_id)
+        form = ReviewForm
+        html = "reviews/edit_review.html"
+    edit_form = form(instance=obj)
+    if request.method == 'POST':
+        form = forms.TicketForm(request.POST, request.FILES)
+        print(form)
+        if form.is_valid():
+            ticket = form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
+            return redirect(settings.REDIRECT_FEED)
+        else: 
+            print(form.errors.as_data())
+    context = {"edit_form": edit_form, "post": obj}
+    return render(request, html, context=context)
+    
+def subscription(request):
+    users_followed = UserFollows.objects.filter(user=request.user)
+    users_followers = UserFollows.objects.filter(followed_user=request.user)
+    if request.method == "POST":
+        follow = request.POST["name"]  # get input name's user from html page.
+        username = request.user
+        try:
+            to_follow = User.objects.get(username=follow)
+            if to_follow != username:
+                if (
+                    UserFollows.objects.get_or_create(
+                        user=request.user, followed_user=to_follow
+                    )
+                    is False
+                ):
+                    UserFollows.objects.create(
+                        user=request.user, followed_user=to_follow
+                    )
+                else:
+                    messages.add_message(
+                        request,
+                        messages.INFO,
+                        f"Vous êtes abonné à {to_follow}.",
+                    )
+            else:
+                messages.add_message(
+                    request, messages.INFO, f"Vous êtes {request.user} !"
+                )
+        except ObjectDoesNotExist:
+            messages.add_message(
+                request, messages.INFO, "Cet utilisateur n'existe pas."
+            )
+
+    return render(
+        request,
+        "reviews/subscription.html",
+        context={
+            "users_followed": users_followed,
+            "users_followers": users_followers,
+        },
+    )
+
+
+

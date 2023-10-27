@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="center-title">Supprimer la publication</div>
+    <form method="post">
+        <div class="ticket-container">
+            <div class="field-group-column">
+                {{ delete_form }}
+                {% csrf_token %}
+                <p>Êtes vous sûr de vouloir supprimer ce post ?</p>
+                <button class="action-button" type="submit">Supprimer</button>
+            </div>
+        </div>
+    </form>
+{% endblock content %}

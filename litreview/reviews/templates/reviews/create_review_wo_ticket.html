@@ -3,33 +3,50 @@
 
 {% block content %}
     <div class="center-title">
-        <p>Créer une critique et un ticket</p>
+        <p>Créer un ticket et une critique</p>
     </div>
-    <form class="field-group-column" method="post" enctype="multipart/form-data">
-        <div class="ticket-container">
-            <div>
-                <p>Livre / Article</p>
-            </div>  
+    <div class="ticket-container">
+        <div>
+            <p>Livre / Article</p>
+        </div>
+        <form class="field-group-column" method="post" enctype="multipart/form-data">
             <div class="field-group-column">    
                 <label for="{{ form.title.label }}">Titre</label>
-                {{ ticket_form.title }}
+                {{ form_ticket.title }}
             </div>
             <div class="field-group-column">
                 <label for="{{ form.description.label }}">Description</label>
-                {{ ticket_form.description }}
+                {{ form_ticket.description }}
             </div>
             <div class="field-group-column">
                 <label>Image</label>
-                {{ ticket_form.image }}
+                {{ form_ticket.image }}
             </div>
-        </div>
-        <div class="ticket-container">
-            <p>Critique</p>
-            {{ review_form.as_p }}
-            {% csrf_token %}
-            <div class="action-button">
-                <button type="submit">Envoyer</button>
+            {{ form_ticket.edit_ticket }}
+            <div>
+                <p>Critique</p>
             </div>
-        </div>
-    </form>
+            <div class="field-group">
+                <label for="title">Titre</label>
+                {{ form_review.headline }}           
+            </div>
+            <div>
+                <div>
+                    <p>Note</p>
+                </div>
+                {{ form_review.rating }}
+            </div>
+            <div class="field-group">
+                <label for="comment">Commentaire</label>
+                {{ form_review.body }}
+            </div>
+            <div class="space-bottom">
+                <div class="action-button">
+                    {{ form_review.edit_review }}
+                    {% csrf_token %}
+                    <button type="submit">Envoyer</button>
+                </div>
+            </div>
+        </form>
+    </div>
 {% endblock content %}

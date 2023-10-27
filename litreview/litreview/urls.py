@@ -28,6 +28,9 @@ urlpatterns = [
     path('ticket/<int:ticket_id>', reviews.views.view_ticket, name='view_ticket'),
     path('create_ticket/', reviews.views.create_ticket, name='create_ticket'),
     path('posts/', reviews.views.posts, name='posts'),
-    path('create_review_ticket/', reviews.views.create_review_ticket, name='create_review_ticket'),
+    path('create_review_ticket/<int:ticket_id>/', reviews.views.create_review_ticket, name='create_review_ticket'),
     path('create_review_wo_ticket/', reviews.views.create_review_wo_ticket, name='create_review_wo_ticket'),
+    path('ticket/<int:ticket_id>/edit', reviews.views.edit_post, name='edit_post'),
+    path('ticket/<int:ticket_id>/delete', reviews.views.delete_post, name='delete_post'),
+    path('subscription/', reviews.views.subscription, name='subscription'),
 ]
