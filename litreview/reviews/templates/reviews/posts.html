@@ -18,10 +18,10 @@
                         <img src="{% static '../' %}{{ post.image }}" alt="logo">
                         <div class="field-group-column">
                             <div>{{ post.title }}</div>
-                            <textarea resize="none" readonly id="description" name="description" rows="10" cols="60">{{ post.description }}</textarea>
+                            <textarea class="non-resizable" readonly id="description" name="description" rows="10" cols="63">{{ post.description }}</textarea>
                         </div>
                     </div>
-                    <div class="create-button-box">
+                    <div class="field-group-row">
                         <a class="action-button" href="{% url 'edit_post' post.id %}">Modifier</a>
                         <a class="action-button" href="{% url 'delete_post' post.id %}">Supprimer</a>
                     </div>
@@ -47,7 +47,7 @@
                     {% endfor %}
                 </div>
                 <div class="field-group">
-                    {{ post.body }}
+                    <textarea class="non-resizable" readonly id="description" name="description" rows="10" cols="94">{{ post.body }}</textarea>
                 </div>        
                 <div class="ticket-container">
                     <div class="field-group-response">
@@ -57,12 +57,12 @@
                         <img src="{% static '../' %}{{ post.ticket.image }}" alt="logo">
                         <div class="field-group-column">
                             <div>{{ post.ticket.title }}</div>
-                            <textarea resize="none" readonly id="description" name="description" rows="10" cols="60">{{ post.ticket.description }}</textarea>
+                            <textarea class="non-resizable" readonly id="description" name="description" rows="10" cols="60">{{ post.ticket.description }}</textarea>
                         </div>
                     </div>    
                 </div>
-                <div class="create-button-box">
-                    <a class="action-button" href="#">Modifier</a>
+                <div class="field-group-row">
+                    <a class="action-button" href="{% url 'edit_post' post.id %}">Modifier</a>
                     <a class="action-button" href="{% url 'delete_post' post.id %}">Supprimer</a>
                 </div>
             {% endif %}    

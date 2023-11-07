@@ -10,6 +10,7 @@
                 {% csrf_token %}
                 <p>Êtes vous sûr de vouloir supprimer ce post ?</p>
                 <button class="action-button" type="submit">Supprimer</button>
+                <a class="action-button" href="{% url 'posts' %}">Annuler</a>
             </div>
         </div>
     </form>

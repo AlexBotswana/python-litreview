@@ -19,7 +19,7 @@
                         <img src="{% static '../' %}{{ post.image }}" alt="logo">
                         <div class="field-group-column">
                             <div>{{ post.title }}</div>
-                            <textarea resize="none" readonly id="description" name="description" rows="10" cols="60">{{ post.description }}</textarea>
+                            <textarea class="non-resizable" readonly id="description" name="description" rows="10" cols="63">{{ post.description }}</textarea>
                         </div>
                     </div>
                     <a class="action-button" href="{% url 'create_review_ticket' post.id %}">Créer une critique</a>
@@ -45,7 +45,7 @@
                     {% endfor %}
                 </div>
                 <div class="field-group">
-                    {{ post.body }}
+                    <textarea class="non-resizable" readonly id="description" name="description" rows="10" cols="94">{{ post.body }}</textarea>
                 </div>        
                 <div class="ticket-container">
                     <div class="field-group-response">
@@ -57,7 +57,7 @@
                         {% endif %}
                         <div class="field-group-column">
                             <div>{{ post.ticket.title }}</div>
-                            <textarea resize="none" readonly id="description" name="description" rows="10" cols="60">{{ post.ticket.description }}</textarea>
+                            <textarea class="non-resizable" readonly id="description" name="description" rows="10" cols="60">{{ post.ticket.description }}</textarea>
                         </div>
                     </div>    
                 </div>

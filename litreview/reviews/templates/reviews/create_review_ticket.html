@@ -2,11 +2,11 @@
 {% load static %}
 
 {% block content %}
+<div class="center-title">
+    <p>Créer une critique</p>
+</div>
+<div class="center-div">
     <div class="ticket-container">
-        <p>Critique</p>
-        <div class="center-title">
-            <p>Créer une critique</p>
-        </div>
         <div class="ticket-container">
             <div>
                 <p>Vous êtes en train de poster en réponse à {{ ticket.title }}</p>
@@ -15,12 +15,12 @@
                 {{ ticket.user }}
                 <label>a demandé une critique</label>          
             </div>
-            <div class="field-group">
-                <label for="description">Description</label>
-                <textarea  id="description" name="description" rows="10" cols="60">{{ ticket.description }}</textarea>
-            </div>
-            <div class="field-group">
+            <div class="field-group-row">
                 <img src="{% static '../' %}{{ ticket.image }}" alt="logo">
+                <div class="field-group-column">
+                    <label for="description">Description</label>
+                    <textarea class="non-resizable" readonly id="description" name="description" rows="10" cols="40">{{ ticket.description }}</textarea>
+                </div>                
             </div>
         </div>
         <form method="post" enctype="multipart/form-data">
@@ -43,13 +43,12 @@
                     {{ review_form.body }}
                 </div>
                 <div class="space-bottom">
-                    <div class="action-button">
-                        {{ review_form.edit_review }}
-                        {% csrf_token %}
-                        <button type="submit">Envoyer</button>
-                    </div>
+                    {{ review_form.edit_review }}
+                    {% csrf_token %}
+                    <button class="action-button" type="submit">Envoyer</button>
                 </div>
             </div>
         </form>
     </div>
+</div>
 {% endblock content %}

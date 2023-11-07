@@ -10,11 +10,6 @@ from django.db.models import CharField, Value
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 
-# def login(request):
-    # locals() will collect all variables that you created inside function.
-    # return render(request, 'template.html', locals())
-    # return render(request, 'login.html')
-
 def logout_user(request):
 
     logout(request)
@@ -53,6 +48,7 @@ def signup_page(request):
     return render(request, 'reviews/signup.html', context={'form': form})
 
 def feed(request):
+    user = get_object_or_404(User, id=request.user.id)
     tickets = models.Ticket.objects.all()
     reviews = models.Review.objects.all()
 
@@ -181,15 +177,16 @@ def edit_post (request, ticket_id):
         html = "reviews/edit_review.html"
     edit_form = form(instance=obj)
     if request.method == 'POST':
-        form = forms.TicketForm(request.POST, request.FILES)
-        print(form)
-        if form.is_valid():
-            ticket = form.save(commit=False)
-            ticket.user = request.user
-            ticket.save()
-            return redirect(settings.REDIRECT_FEED)
-        else: 
-            print(form.errors.as_data())
+        edit_form = form(request.POST or None, request.FILES or None, instance=obj)
+        # form = forms.TicketForm(request.POST, request.FILES, instance=obj)
+        if edit_form.is_valid():
+            # ticket = form.save(commit=False)
+            # ticket.user = request.user
+            # ticket.save()
+            edit_form.save()
+            return redirect("posts")
+        # else: 
+            # print(form.errors.as_data())
     context = {"edit_form": edit_form, "post": obj}
     return render(request, html, context=context)
     
@@ -235,5 +232,14 @@ def subscription(request):
         },
     )
 
+def unfollow(request, user_follows_id):
+    """
+    get user followed id
+    delete subscription and redirect to 'subscription'
+    """
+    if request.method == "GET":
+        subscription = UserFollows.objects.filter(pk=user_follows_id)
+        subscription.delete()
+    return redirect("subscription")
 
 

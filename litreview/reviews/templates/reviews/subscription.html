@@ -2,12 +2,18 @@
 {% load static %}
 
 {% block content %}
+<div class="center-title">
+    <p>Suivre d'autres utilisateurs</p>
+</div>
+<div class="center-div">
     <div class="subscrib-container">
-        <div>
-            <p>Suivre d'autres utilisateurs</p>
-        </div>
         <form method="post">
             {% csrf_token %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }} <br>
+                    {% endfor %}
+                {% endif %}
             <div class="subs-align-btn">
                 <input type="text" name="name" placeholder="Nom de l'utilisateur">
                 <button class="action-button" type="submit">Envoyer</button>
@@ -22,7 +28,7 @@
                     {{ followed.followed_user }}
                 </div>
                 <div class="field-group">
-                    <a href="#">désabonner</a>
+                    <a href="{% url 'unfollow' followed.id %}">désabonner</a>
                 </div>
             </div>
         {% endfor %}
@@ -30,10 +36,14 @@
         <div>
             <p>Abonnés</p>
         </div>
-        {% for follower in users_followers %}
+        {% for follower in users_followers %}        
+        <div class="subs-list-line">
             <div class="field-group">
                 {{ follower.user }}
             </div>
+        </div>
         {% endfor %}
+        </div>
     </div>
+</div>
 {% endblock content %}

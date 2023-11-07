@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="center-title">
+        Modifier une critique
+    </div>
+    <div class="center-div">    
+        <form method="post" enctype="multipart/form-data">
+            <div class="ticket-container">
+                <div class="field-group">
+                    <label for="title">Titre</label>
+                    {{ edit_form.headline }}           
+                </div>
+                <div>
+                    <div>
+                        <p>Note</p>
+                    </div>
+                    {{ edit_form.rating }}
+                </div>
+                <div class="field-group">
+                    <label for="comment">Commentaire</label>
+                    {{ edit_form.body }}
+                </div>
+                <div class="space-bottom">
+                    {{ edit_form.edit_review }}
+                    {% csrf_token %}
+                    <button class="action-button" type="submit">Envoyer</button>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
