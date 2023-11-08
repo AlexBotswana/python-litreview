@@ -6,7 +6,7 @@ from . import forms, models
 from .forms import ReviewForm, TicketForm, DeletePostForm
 from .models import Ticket, Review, UserFollows
 from itertools import chain
-from django.db.models import CharField, Value
+from django.db.models import CharField, Value, Q
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -48,9 +48,10 @@ def signup_page(request):
     return render(request, 'reviews/signup.html', context={'form': form})
 
 def feed(request):
-    user = get_object_or_404(User, id=request.user.id)
-    tickets = models.Ticket.objects.all()
-    reviews = models.Review.objects.all()
+    user = request.user
+    followed_users = models.UserFollows.objects.filter(user=user).values_list('followed_user_id', flat=True)
+    tickets = models.Ticket.objects.filter(Q(user=user) | Q(user__in=followed_users)) # to exclude ticket if already a critic on it : .exclude(review__isnull=False)
+    reviews = models.Review.objects.filter(Q(user=user) | Q(user__in=followed_users))
 
     tickets = tickets.annotate(content_type=Value("TICKET", CharField()))
     reviews = reviews.annotate(content_type=Value("REVIEW", CharField()))
