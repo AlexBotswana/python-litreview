@@ -51,7 +51,8 @@
                 </div>        
                 <div class="ticket-container">
                     <div class="field-group-response">
-                        <label>Ticket </label> 
+                        <label>Ticket -  </label>
+                        {{ post.ticket.user.username }} 
                     </div>
                     <div class="field-group-row">
                         <img src="{% static '../' %}{{ post.ticket.image }}" alt="logo">
