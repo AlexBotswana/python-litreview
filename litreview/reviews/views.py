@@ -10,6 +10,7 @@ from django.db.models import CharField, Value, Q
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 
+
 def logout_user(request):
     logout(request)
     return redirect('login')
@@ -34,6 +35,7 @@ def login_page(request):
         context={'form': form, 'message': message}
     )
 
+
 def signup_page(request):
     form = forms.SignupForm()
     if request.method == 'POST':
@@ -44,11 +46,19 @@ def signup_page(request):
             return redirect(settings.LOGIN_URL)
     return render(request, 'reviews/signup.html', context={'form': form})
 
+
 def feed(request):
     user = request.user
-    followed_users = models.UserFollows.objects.filter(user=user).values_list('followed_user_id', flat=True)
-    tickets = models.Ticket.objects.filter(Q(user=user) | Q(user__in=followed_users)) # to exclude ticket if already a critic on it : .exclude(review__isnull=False)
-    reviews = models.Review.objects.filter(Q(user=user) | Q(user__in=followed_users))
+    followed_users = models.UserFollows.objects.filter(user=user).values_list(
+        'followed_user_id',
+        flat=True,
+        )
+    tickets = models.Ticket.objects.filter(
+        Q(user=user) | Q(user__in=followed_users),
+        )
+    reviews = models.Review.objects.filter(
+        Q(user=user) | Q(user__in=followed_users),
+        )
     tickets = tickets.annotate(content_type=Value("TICKET", CharField()))
     reviews = reviews.annotate(content_type=Value("REVIEW", CharField()))
     posts = sorted(
@@ -56,8 +66,16 @@ def feed(request):
         key=lambda post: post.time_created,
         reverse=True
         )
-    stars_values= [1,2,3,4,5]
-    return render(request, 'reviews/feed.html', context={'posts': posts, 'stars_values': stars_values})
+    stars_values = [1, 2, 3, 4, 5]
+    return render(
+        request,
+        'reviews/feed.html',
+        context={
+            'posts': posts,
+            'stars_values': stars_values,
+            },
+        )
+
 
 def create_ticket(request):
     form = forms.TicketForm()
@@ -69,7 +87,14 @@ def create_ticket(request):
             ticket.user = request.user
             ticket.save()
             return redirect(settings.REDIRECT_FEED)
-    return render(request, 'reviews/create_ticket.html', context={'form': form})
+    return render(
+        request,
+        'reviews/create_ticket.html',
+        context={
+            'form': form
+            }
+        )
+
 
 def posts(request):
     current_user = request.user
@@ -82,8 +107,16 @@ def posts(request):
         key=lambda post: post.time_created,
         reverse=True
         )
-    stars_values= [1,2,3,4,5]
-    return render(request, "reviews/posts.html", context={'posts': posts, 'stars_values': stars_values})
+    stars_values = [1, 2, 3, 4, 5]
+    return render(
+        request,
+        "reviews/posts.html",
+        context={
+            'posts': posts,
+            'stars_values': stars_values
+            }
+        )
+
 
 def create_review_ticket(request, ticket_id):
     review_form = ReviewForm()
@@ -91,17 +124,22 @@ def create_review_ticket(request, ticket_id):
     if request.method == 'POST':
         review_form = ReviewForm(request.POST, request.FILES)
         if review_form.is_valid():
-            review = review_form.save(commit=False) 
+            review = review_form.save(commit=False)
             review.ticket = ticket
             ticket.save()
-            review.user = request.user  
-            review.save()  
-            return redirect(settings.REDIRECT_FEED)    
+            review.user = request.user
+            review.save()
+            return redirect(settings.REDIRECT_FEED)
     context = {
         "review_form": review_form,
         "ticket": ticket,
     }
-    return render(request, 'reviews/create_review_ticket.html', context=context)
+    return render(
+        request,
+        'reviews/create_review_ticket.html',
+        context=context
+        )
+
 
 def create_review_wo_ticket(request):
     form_ticket = TicketForm()
@@ -128,7 +166,12 @@ def create_review_wo_ticket(request):
         "form_ticket": form_ticket,
         "form_review": form_review,
     }
-    return render(request, 'reviews/create_review_wo_ticket.html', context=context)
+    return render(
+        request,
+        'reviews/create_review_wo_ticket.html',
+        context=context,
+        )
+
 
 def delete_post(request, ticket_id):
     # get post id and delete if ticket or review
@@ -147,7 +190,8 @@ def delete_post(request, ticket_id):
     context = {"delete_form": delete_form}
     return render(request, 'reviews/delete_post.html', context=context)
 
-def edit_post (request, ticket_id):
+
+def edit_post(request, ticket_id):
     """ get post_id and edit post (try ticket, else review)"""
     try:
         obj = Ticket.objects.get(id=ticket_id)
@@ -159,13 +203,18 @@ def edit_post (request, ticket_id):
         html = "reviews/edit_review.html"
     edit_form = form(instance=obj)
     if request.method == 'POST':
-        edit_form = form(request.POST or None, request.FILES or None, instance=obj)
+        edit_form = form(
+            request.POST or None,
+            request.FILES or None,
+            instance=obj,
+            )
         if edit_form.is_valid():
             edit_form.save()
             return redirect("posts")
     context = {"edit_form": edit_form, "post": obj}
     return render(request, html, context=context)
-    
+
+
 def subscription(request):
     users_followed = UserFollows.objects.filter(user=request.user)
     users_followers = UserFollows.objects.filter(followed_user=request.user)
@@ -207,6 +256,7 @@ def subscription(request):
         },
     )
 
+
 def unfollow(request, user_follows_id):
     """
     get user followed id
@@ -216,6 +266,3 @@ def unfollow(request, user_follows_id):
         subscription = UserFollows.objects.filter(pk=user_follows_id)
         subscription.delete()
     return redirect("subscription")
-
-
-

@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from . import models
 
+
 class LoginForm(forms.Form):
 
     username = forms.CharField(
@@ -49,6 +50,7 @@ class SignupForm(UserCreationForm):
         model = get_user_model()
         fields = ('username',)
 
+
 class TicketForm(forms.ModelForm):
     edit_ticket = forms.BooleanField(
         widget=forms.HiddenInput,
@@ -60,15 +62,17 @@ class TicketForm(forms.ModelForm):
     )
     description = forms.CharField(
         max_length=2048,
-        widget=forms.Textarea(attrs={'class':"xl-field"})
+        widget=forms.Textarea(attrs={'class': "xl-field"})
     )
     image = forms.ImageField(
         required=True,
         widget=forms.FileInput
     )
+
     class Meta:
         model = models.Ticket
         fields = ['title', 'description', 'image']
+
 
 class ReviewForm(forms.ModelForm):
     CHOICES = [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 5)]
@@ -90,12 +94,15 @@ class ReviewForm(forms.ModelForm):
             attrs={'class': 'radio-block'}
             )
         )
+
     class Meta:
         model = models.Review
         fields = ['headline', 'rating', 'body']
 
+
 class DeletePostForm(forms.Form):
     delete_post = forms.BooleanField(widget=forms.HiddenInput, initial=True)
+
 
 class FollowUsersForm(forms.ModelForm):
     """
