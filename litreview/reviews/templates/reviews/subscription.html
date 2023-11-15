@@ -16,7 +16,7 @@
                 {% endif %}
             <div class="subs-align-btn">
                 <input type="text" name="name" placeholder="Nom de l'utilisateur">
-                <button class="action-button" type="submit">Envoyer</button>
+                <button role="button" class="action-button" type="submit">Envoyer</button>
             </div>
         </form>
         <div>
@@ -28,7 +28,7 @@
                     {{ followed.followed_user }}
                 </div>
                 <div class="field-group">
-                    <a href="{% url 'unfollow' followed.id %}">désabonner</a>
+                    <a href="{% url 'unfollow' followed.id %}" aria-label="Se désabonner d'un utilisateur" >désabonner</a>
                 </div>
             </div>
         {% endfor %}

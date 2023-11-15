@@ -21,11 +21,11 @@ Cloner le projet à l'aide de votre terminal en tapant la commande :
 ```
 Créer un environnement virtuel à l'aide de votre terminal, se positionner dans le répertoire python-litreview et taper la commande suivante:
 ```
-   python -m venv env
+   python -m venv litreview-venv
 ```
 puis l'activer : 
 ```
-   .\env\scripts\activate
+   ./litreview-venv/Scripts/activate
 ```
 Installation des requirements.txt (se positionner dans le répertoire du projet):
 ```

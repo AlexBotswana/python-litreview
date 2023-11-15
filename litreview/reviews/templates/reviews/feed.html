@@ -3,8 +3,8 @@
 
 {% block content %}
     <div class="feed-buttons">
-        <a class="action-button" href="{% url 'create_ticket' %}">Créer un ticket</a>
-        <a class="action-button" href="{% url 'create_review_wo_ticket' %}">Créer une critique</a>
+        <a role="button" class="action-button" href="{% url 'create_ticket' %}">Créer un ticket</a>
+        <a role="button" class="action-button" href="{% url 'create_review_wo_ticket' %}">Créer une critique</a>
     </div>
     {% for post in posts %}
         <div class="center-div">
@@ -16,13 +16,13 @@
                         {{ post.time_created|date:"d-m-Y à H:i" }}                        
                     </div>
                     <div class="field-group-row">
-                        <img src="{% static '../' %}{{ post.image }}" alt="logo">
+                        <img src="{% static '../' %}{{ post.image }}" alt="Image liée au ticket">
                         <div class="field-group-column">
                             <div>{{ post.title }}</div>
                             <textarea class="non-resizable" readonly id="description" name="description" rows="10" cols="63">{{ post.description }}</textarea>
                         </div>
                     </div>
-                    <a class="action-button" href="{% url 'create_review_ticket' post.id %}">Créer une critique</a>
+                    <a role="button" class="action-button" href="{% url 'create_review_ticket' post.id %}">Créer une critique</a>
                 </div>
             </div>
             {% elif post.content_type == 'REVIEW' %}
@@ -38,9 +38,9 @@
                     <div>Note - </div>
                     {% for star in stars_values %}
                         {% if star <=  post.rating %}
-                            <img src="{% static './img/star-filled.png/' %}" width="30" height="30" alt="*">
+                            <img src="{% static './img/star-filled.png/' %}" width="30" height="30" alt="Etoile pleine">
                         {% elif star > post.rating %}
-                            <img src="{% static './img/star-lined.png/' %}" width="30" height="30" alt="*">
+                            <img src="{% static './img/star-lined.png/' %}" width="30" height="30" alt="Etoile vide">
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -54,7 +54,7 @@
                     </div>
                     <div class="field-group-row">
                         {% if post.ticket.image %}
-                        <img src="{% static '../' %}{{ post.ticket.image }}" alt="logo">
+                        <img src="{% static '../' %}{{ post.ticket.image }}" alt="Image liée au ticket">
                         {% endif %}
                         <div class="field-group-column">
                             <div>{{ post.ticket.title }}</div>

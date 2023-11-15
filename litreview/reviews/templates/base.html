@@ -12,15 +12,15 @@
 <body>
     <header class="navbar">
         <div class="navbar-left">
-            <img src="{% static '/img/logo-sans-texte.png' %}" alt="logo">
+            <img src="{% static '/img/logo-sans-texte.png' %}" alt="logo LITReview">
             <h1 class="logo-title">LITReview</h1>
         </div>
         <div>
-            <li><a href="{% url 'feed' %}" class="link">Flux</a></li>
-            <li><a href="{% url 'posts' %}" class="link">Posts</a></li>
-            <li><a href="{% url 'subscription' %}" class="link">Abonnements</a></li>
+            <li><a role="link" href="{% url 'feed' %}" class="link">Flux</a></li>
+            <li><a role="link" href="{% url 'posts' %}" class="link">Posts</a></li>
+            <li><a role="link" href="{% url 'subscription' %}" class="link">Abonnements</a></li>
             {% if user.is_authenticated %}
-                <li><a href="{% url 'logout' %}" class="link">Se déconnecter</a></li>
+                <li><a role="link" href="{% url 'logout' %}" class="link">Se déconnecter</a></li>
             {% endif %}
         </div>
     </header>

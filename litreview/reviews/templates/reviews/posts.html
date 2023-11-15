@@ -15,15 +15,15 @@
                         {{ post.time_created|date:"d-m-Y à H:i" }}                        
                     </div>
                     <div class="field-group-row">
-                        <img src="{% static '../' %}{{ post.image }}" alt="logo">
+                        <img src="{% static '../' %}{{ post.image }}" alt="Image liée au ticket">
                         <div class="field-group-column">
                             <div>{{ post.title }}</div>
                             <textarea class="non-resizable" readonly id="description" name="description" rows="10" cols="63">{{ post.description }}</textarea>
                         </div>
                     </div>
                     <div class="field-group-row">
-                        <a class="action-button" href="{% url 'edit_post' post.id %}">Modifier</a>
-                        <a class="action-button" href="{% url 'delete_post' post.id %}">Supprimer</a>
+                        <a role="button" class="action-button" href="{% url 'edit_post' post.id %}">Modifier</a>
+                        <a role="button" class="action-button" href="{% url 'delete_post' post.id %}">Supprimer</a>
                     </div>
                 </div>
             </div>
@@ -40,9 +40,9 @@
                     <div>Note - </div>
                     {% for star in stars_values %}
                         {% if star <=  post.rating %}
-                            <img src="{% static './img/star-filled.png/' %}" width="30" height="30" alt="*">
+                            <img src="{% static './img/star-filled.png/' %}" width="30" height="30" alt="Etoile pleine">
                         {% elif star > post.rating %}
-                            <img src="{% static './img/star-lined.png/' %}" width="30" height="30" alt="*">
+                            <img src="{% static './img/star-lined.png/' %}" width="30" height="30" alt="Etoile vide">
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -55,7 +55,7 @@
                         {{ post.ticket.user.username }} 
                     </div>
                     <div class="field-group-row">
-                        <img src="{% static '../' %}{{ post.ticket.image }}" alt="logo">
+                        <img src="{% static '../' %}{{ post.ticket.image }}" alt="Image liée au ticket">
                         <div class="field-group-column">
                             <div>{{ post.ticket.title }}</div>
                             <textarea class="non-resizable" readonly id="description" name="description" rows="10" cols="60">{{ post.ticket.description }}</textarea>
@@ -63,8 +63,8 @@
                     </div>    
                 </div>
                 <div class="field-group-row">
-                    <a class="action-button" href="{% url 'edit_post' post.id %}">Modifier</a>
-                    <a class="action-button" href="{% url 'delete_post' post.id %}">Supprimer</a>
+                    <a role="button" class="action-button" href="{% url 'edit_post' post.id %}">Modifier</a>
+                    <a role="button" class="action-button" href="{% url 'delete_post' post.id %}">Supprimer</a>
                 </div>
             {% endif %}    
             </div>

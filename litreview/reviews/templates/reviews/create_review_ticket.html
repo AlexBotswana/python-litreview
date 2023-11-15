@@ -16,7 +16,7 @@
                 <label>a demandé une critique</label>          
             </div>
             <div class="field-group-row">
-                <img src="{% static '../' %}{{ ticket.image }}" alt="logo">
+                <img src="{% static '../' %}{{ ticket.image }}" alt="Image liée au ticket">
                 <div class="field-group-column">
                     <label for="description">Description</label>
                     <textarea class="non-resizable" readonly id="description" name="description" rows="10" cols="40">{{ ticket.description }}</textarea>
@@ -45,7 +45,7 @@
                 <div class="space-bottom">
                     {{ review_form.edit_review }}
                     {% csrf_token %}
-                    <button class="action-button" type="submit">Envoyer</button>
+                    <button role="button" class="action-button" type="submit">Envoyer</button>
                 </div>
             </div>
         </form>
